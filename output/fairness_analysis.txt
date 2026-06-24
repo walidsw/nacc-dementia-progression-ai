@@ -1,0 +1,32 @@
+================================================================================
+DEMOGRAPHIC FAIRNESS ANALYSIS (TEST SET)
+================================================================================
+
+
+Sex-based Performance:
+----------------------------------------
+ Group     N  Accuracy  F1-Macro
+  Male 12683  0.859576  0.843898
+Female 17256  0.877955  0.831061
+
+
+Age-based Performance:
+----------------------------------------
+      Group     N  Accuracy  F1-Macro
+Group 65-74 10696  0.890800  0.849815
+Group 75-84 10424  0.851784  0.828962
+  Group 85+  3576  0.827181  0.813039
+  Group <65  5243  0.893954  0.855690
+
+
+Race-based Performance:
+----------------------------------------
+                           Group     N  Accuracy  F1-Macro
+                           White 24826  0.871546  0.840032
+          Black/African American  3723  0.863820  0.821427
+   American Indian/Alaska Native   190  0.857895  0.811687
+Native Hawaiian/Pacific Islander    13  0.923077  0.893939
+                           Asian   791  0.859671  0.831865
+               Other/Multiracial   286  0.867133  0.857882
+                         Unknown   110  0.872727  0.851083
+

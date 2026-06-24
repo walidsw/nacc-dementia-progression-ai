@@ -1,0 +1,34 @@
+<![CDATA[MIT License
+
+Copyright (c) 2026 Department of Computer Science and Engineering,
+Rajshahi University of Engineering and Technology (RUET)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+--- DATA EXCLUSION CLAUSE ---
+
+This license applies exclusively to the source code, scripts, configuration
+files, and documentation contained in this repository. The National
+Alzheimer's Coordinating Center (NACC) dataset used in this research is NOT
+covered by this license. The NACC data is provided under a separate Data Use
+Agreement (DUA) administered by the National Alzheimer's Coordinating Center
+at the University of Washington. Access to, use of, and redistribution of
+NACC data are governed solely by the terms of that agreement. Researchers must
+obtain their own independent data access through https://naccdata.org/.
+]]>
