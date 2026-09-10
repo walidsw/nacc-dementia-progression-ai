@@ -69,10 +69,11 @@
 
 \vspace{0.5em}
 \needspace{8\baselineskip}
-\textbf{Results:} On an independent test set of 29,939 visits from 7,527 patients, the base XGBoost model achieved \textbf{87.82\%} accuracy, \textbf{85.14\%} macro F1, and \textbf{87.95\%} weighted F1. Class-specific F1-scores were 0.93 (Normal), 0.83 (MCI), 0.77 (Mild), and 0.88 (Severe). Of all misclassifications, 94.9\% were one stage off, with only 0.2\% three stages off. Performance was broadly consistent across sex, age, and race. SHAP analysis identified diagnosis trajectory, current diagnostic state, and age-diagnosis interaction features as the strongest predictors. Adding BorderlineSMOTE or ensembling reduced aggregate performance relative to the base model.
+\textbf{Results:} On an independent test set of 29,939 visits from 7,527 patients, the base XGBoost model achieved \textbf{87.82\%} accuracy, \textbf{85.14\%} macro F1, and \textbf{87.95\%} weighted F1. Class-specific F1-scores were 0.93 (Normal), 0.83 (MCI), 0.77 (Mild), and 0.88 (Severe). Of all misclassifications, 94.9\% were one stage off, with only 0.2\% three stages off. Performance was broadly consistent across sex, age, and race, although limited subgroup sizes for several racial groups preclude definitive fairness conclusions. SHAP analysis identified diagnosis trajectory, current diagnostic state, and age-diagnosis interaction features as the strongest predictors. Adding BorderlineSMOTE or ensembling reduced aggregate performance relative to the base model.
 
 \vspace{0.5em}
-\textbf{Conclusions:} Robust dementia risk stratification is achievable without expensive neuroimaging, using only routine clinical assessments. The framework offers a scalable, transparent, and demographically fair tool for clinical decision support in community healthcare and resource-constrained settings, supporting a ``Frugal AI'' paradigm that democratizes early Alzheimer's detection.
+%% TODO-A1: revisit after Part B (clinical-only claim; contrasts with Section 2.2 genetic-risk features)
+\textbf{Conclusions:} Robust dementia risk stratification is achievable without expensive neuroimaging, using only routine clinical assessments. The framework offers a scalable and transparent tool for clinical decision support in community healthcare and resource-constrained settings, with performance broadly similar across the evaluated demographic subgroups; larger subgroup samples are needed before definitive fairness claims can be made. These results support a ``Frugal AI'' paradigm that democratizes early Alzheimer's detection.
 \end{abstract}
 
 \begin{keyword}
@@ -105,11 +106,11 @@ Alzheimer's Disease \sep Clinical Forecasting \sep Ensemble Learning \sep NACC D
 % =================================================================================
 \section{Introduction}
 
-Alzheimer's disease (AD) is a progressive neurodegenerative disorder and the leading cause of dementia, affecting over 55 million people worldwide~\cite{alz2024}. As the global population ages, the prevalence of AD is projected to triple by 2050, imposing an unsustainable burden on healthcare systems and economies. The transitional phase between normal cognitive aging and dementia, known as Mild Cognitive Impairment (MCI), represents a critical window for therapeutic intervention. Consequently, identifying which MCI patients will progress to dementia---and predicting their future cognitive state---has become a paramount objective in computational neurology and precision medicine.
+Alzheimer's disease (AD) is a progressive neurodegenerative disorder and the leading cause of dementia, affecting over 55 million people worldwide~\cite{alz2024,gbd2019}. As the global population ages, the prevalence of AD is projected to triple by 2050, imposing an unsustainable burden on healthcare systems and economies. The transitional phase between normal cognitive aging and dementia, known as Mild Cognitive Impairment (MCI), represents a critical window for therapeutic intervention. Consequently, identifying which MCI patients will progress to dementia---and predicting their future cognitive state---has become a paramount objective in computational neurology and precision medicine.
 
 \subsection{The Accessibility Gap in Current AI Models}
 
-Recent advances in Artificial Intelligence (AI) and machine learning have yielded models capable of predicting AD progression with remarkable accuracy. However, many studies rely on multimodal data, including MRI, PET, or cerebrospinal fluid biomarkers. These approaches are costly or invasive, require specialist facilities concentrated in academic centers, and often use smaller datasets that increase overfitting risk; consequently, they are difficult to generalize and scale to population screening.
+Recent advances in Artificial Intelligence (AI) and machine learning have yielded models capable of predicting AD progression with remarkable accuracy; throughout this work, ``progression'' refers specifically to the next recorded CDR-based dementia stage rather than to the underlying neuropathological process. However, many studies rely on multimodal data, including MRI, PET, or cerebrospinal fluid biomarkers. These approaches are costly or invasive, require specialist facilities concentrated in academic centers, and often use smaller datasets that increase overfitting risk; consequently, they are difficult to generalize and scale to population screening.
 
 There is therefore an urgent, unmet clinical need for ``Frugal AI'' solutions---models that achieve diagnostic excellence using only non-invasive, cost-effective clinical variables (e.g., demographics, cognitive assessments, medical history, functional status) that can be routinely collected during standard clinical encounters.
 
@@ -117,14 +118,14 @@ There is therefore an urgent, unmet clinical need for ``Frugal AI'' solutions---
 
 Beyond data modality considerations, two methodological challenges frequently undermine the clinical validity of machine learning models in dementia research. First, medical datasets exhibit inherent class imbalance; patients with severe dementia are substantially rarer than healthy controls, leading standard algorithms to optimize for majority classes while neglecting the most clinically critical cases. Our dataset demonstrates a 4.7:1 imbalance ratio between the most and least prevalent classes.
 
-Second, algorithmic fairness has emerged as a critical concern in healthcare AI~\cite{obermeyer2019}. Models trained on demographically skewed populations (predominantly white, highly educated, urban-dwelling participants) may fail to generalize equitably to diverse demographic groups, potentially exacerbating existing healthcare disparities. This concern is particularly acute in dementia research, where socioeconomic factors influence both disease presentation and healthcare access.
+Second, algorithmic fairness has emerged as a critical concern in healthcare AI~\cite{obermeyer2019,rajkomar2018,gianfrancesco2018}. Models trained on demographically skewed populations (predominantly white, highly educated, urban-dwelling participants) may fail to generalize equitably to diverse demographic groups, potentially exacerbating existing healthcare disparities. This concern is particularly acute in dementia research, where socioeconomic factors influence both disease presentation and healthcare access.
 
 \subsection{Contributions and Novelty}
 
-To address these gaps, this study presents a comprehensive framework for robust prediction of dementia progression using \textit{exclusively} NACC clinical data. Our key contributions are:
+To address these gaps, this study presents a comprehensive framework for robust prediction of the next-visit CDR-based dementia stage using \textit{exclusively} NACC clinical data. Our key contributions are:
 
 \begin{itemize}
-    \item \textbf{Clinical-Only Next-Visit Forecasting:} We demonstrate state-of-the-art performance using an optimized Gradient Boosting Machine (XGBoost), proving that expensive neuroimaging is not strictly necessary for accurate risk stratification. Unlike static cross-sectional classification, our model explicitly predicts the \textit{future} diagnostic state ($t+1$), providing actionable prognostic information. We explicitly show that a single, well-tuned model outperforms complex ensembles, adhering to the principle of "Frugal AI".
+    \item \textbf{Clinical-Only Next-Visit Forecasting:} We demonstrate state-of-the-art performance using an optimized Gradient Boosting Machine (XGBoost), proving that expensive neuroimaging is not strictly necessary for accurate risk stratification. Unlike static cross-sectional classification, our model explicitly predicts the \textit{future} CDR-based diagnostic stage ($t+1$), providing actionable prognostic information. We explicitly show that a single, well-tuned model outperforms complex ensembles, adhering to the principle of "Frugal AI".
 
     \item \textbf{Rigorous Validation with Leakage Prevention:} We implement patient-level GroupShuffleSplit validation, ensuring no patient's data appears in both training and test sets---a common methodological flaw in longitudinal studies that artificially inflates performance metrics.
 
@@ -134,6 +135,8 @@ To address these gaps, this study presents a comprehensive framework for robust 
 
     \item \textbf{Interpretable Feature Attribution:} We employ SHAP (SHapley Additive exPlanations) values to provide transparent, clinician-interpretable explanations of model predictions, aligning with regulatory requirements for explainable AI in healthcare.
 \end{itemize}
+
+Several recent studies have addressed closely related prediction tasks. Prior work has applied survival and clinical-variable models to the NACC and ADNI cohorts to predict progression~\cite{pang2023,song2023,arnold2025}, and deep recurrent architectures have been applied to multimodal longitudinal data for next-visit prediction~\cite{alolaimat2023}; machine learning on NACC has also been applied to related clinical outcomes~\cite{yew2024}. The closest published precedent is a recent XGBoost model trained on NACC and externally validated on a Latvian clinical cohort~\cite{kannenieks2026}. Our contribution differs in three respects: we predict a four-class, patient-level next-visit CDR-based stage rather than a binary or three-class conversion outcome; we use a deliberately simple clinical-tabular model rather than multimodal recurrent networks; and we add explicit demographic-fairness and error-severity audits.
 
 % =================================================================================
 % 2. MATERIALS AND METHODS
@@ -178,7 +181,7 @@ After excluding the patient identifier, visit number, and future target from the
 
     \item \textbf{Diagnosis trajectory (17 features):} The current diagnosis, four one-hot current-diagnosis indicators, three lagged diagnoses, first-visit and stability/progression indicators, progression speed, diagnosis-change count, stability score, diagnosis mean and standard deviation, and worst diagnosis ever recorded. Historical diagnosis features were computed from prior visits for each patient; the current diagnosis is retained as a predictor of the subsequent target.
 
-    \item \textbf{Genetic risk (10 features):} Five raw APOE/family-history variables and five engineered APOE4 indicators and age-risk features.
+    \item \textbf{Genetic risk (10 features):} Five raw APOE/family-history variables and five engineered APOE4 indicators and age-risk features. APOE genotype is included here as one of the routine clinical/family-history variables used by the framework; its practical availability varies by care setting.
 
     \item \textbf{Comorbidity and medical history (37 features):} Twenty-eight raw cardiovascular, neurological, metabolic, functional, behavioral, and medication variables, plus nine engineered cardiovascular, neurological, metabolic, and total-burden indicators.
 
@@ -203,7 +206,7 @@ The target distribution exhibited class imbalance: Normal 50.8\%, MCI 26.5\%, Mi
 
 Missing values in numerical features (e.g., BMI, blood pressure) were imputed using median values stratified by current diagnosis class to preserve biological variance. Categorical variables were label-encoded. Infinite values were clipped to prevent numerical overflow.
 
-\textbf{Patient-Level Data Splitting:} To prevent data leakage---a critical flaw where a patient's longitudinal visits appear in both training and test sets, artificially inflating accuracy---we employed \texttt{GroupShuffleSplit} stratification. All visits belonging to a specific patient ID (\texttt{NACCID}) were assigned exclusively to either the Training set (80\%, 120,965 visits from 30,106 patients) or Test set (20\%, 29,939 visits from 7,527 patients). Zero patient overlap was verified between partitions.
+\textbf{Patient-Level Data Splitting:} To prevent data leakage---a critical flaw where a patient's longitudinal visits appear in both training and test sets, artificially inflating accuracy~\cite{kapoor2023}---we employed \texttt{GroupShuffleSplit} stratification. All visits belonging to a specific patient ID (\texttt{NACCID}) were assigned exclusively to either the Training set (80\%, 120,965 visits from 30,106 patients) or Test set (20\%, 29,939 visits from 7,527 patients). Zero patient overlap was verified between partitions. This study is reported in accordance with the TRIPOD+AI guidance for clinical prediction models that use machine learning~\cite{collins2024,collins2021}.
 
 \subsection{Gradient Boosting Framework}
 
@@ -227,7 +230,7 @@ All models utilized early stopping (100 rounds) with 20\% validation holdout fro
 
 \subsection{Class Imbalance Handling}
 
-We evaluated \textbf{BorderlineSMOTE} \cite{han2005}---a variant of the Synthetic Minority Over-sampling Technique---only in the designated ablation configurations. When used, it was applied exclusively to the training subset after GroupShuffleSplit partitioning, ensuring that the test set contained only real, unaugmented patient visits. The final Config 1 model used no SMOTE.
+We evaluated \textbf{BorderlineSMOTE} \cite{han2005}---a variant of the Synthetic Minority Over-sampling Technique (SMOTE) \cite{chawla2002}---only in the designated ablation configurations. When used, it was applied exclusively to the training subset after GroupShuffleSplit partitioning, ensuring that the test set contained only real, unaugmented patient visits. The final Config 1 model used no SMOTE.
 
 Class weights were computed using inverse frequency weighting with empirical multipliers optimized for minority class performance: Normal=0.49, MCI=1.42, Mild=6.93, Severe=5.23.
 
@@ -302,9 +305,9 @@ A critical question in clinical AI is whether increased model complexity transla
 
 \textbf{Interpretation:} The base XGBoost model without synthetic oversampling or ensembling yielded the highest aggregate performance. Adding SMOTE reduced macro F1 by approximately 1.4 percentage points, and the full ensemble reduced it by approximately 2.3 percentage points relative to the base configuration (Supplementary Table S1). These results support a ``Frugal AI'' approach in which the simpler model is preferred for this evaluation split.
 
-\subsection{Error Analysis and Clinical Safety}
+\subsection{Error Analysis and Error Severity}
 
-We conducted a detailed analysis of the 3,646 misclassified samples (12.2\% error rate) to assess clinical safety (Table~\ref{tab:errors}).
+We conducted a detailed analysis of the 3,646 misclassified samples (12.2\% error rate) to characterize error severity (Table~\ref{tab:errors}).
 
 \begin{table}[htbp]
 \caption{Error Severity Distribution}
@@ -398,11 +401,11 @@ To enable clinical transparency, we applied SHAP TreeExplainer to quantify featu
 \toprule
 \textbf{Rank} & \textbf{Normal} & \textbf{MCI} & \textbf{Mild} & \textbf{Severe} \\
 \midrule
-1 & \texttt{diagnosis\_mean} & \texttt{diagnosis\_mean} & \texttt{diagnosis\_mean} & target (current) \\
-2 & target (current) & \texttt{diagnosis\_std} & \texttt{age\_diagnosis\_product} & \texttt{age\_diagnosis\_product} \\
-3 & \texttt{age\_diagnosis\_product} & \texttt{is\_mci\_now} & \texttt{worst\_diagnosis\_ever} & \texttt{diagnosis\_mean} \\
-4 & \texttt{diagnosis\_std} & \texttt{diagnosis\_changes} & \texttt{is\_mild\_now} & \texttt{diagnosis\_std} \\
-5 & \texttt{NACCAGE} & \texttt{age\_diagnosis\_product} & \texttt{diagnosis\_std} & \texttt{diagnosis\_changes} \\
+1 & \texttt{diagnosis\_mean} & \texttt{diagnosis\_mean} & \texttt{age\_diagnosis\_product} & \texttt{age\_diagnosis\_product} \\
+2 & target (current) & \texttt{diagnosis\_std} & \texttt{diagnosis\_mean} & target (current) \\
+3 & \texttt{age\_diagnosis\_product} & \texttt{diagnosis\_changes} & \texttt{worst\_diagnosis\_ever} & \texttt{diagnosis\_std} \\
+4 & \texttt{diagnosis\_std} & target (current) & \texttt{is\_mild\_now} & \texttt{diagnosis\_mean} \\
+5 & \texttt{diagnosis\_changes} & \texttt{worst\_diagnosis\_ever} & target (current) & \texttt{educ\_diagnosis\_interaction} \\
 \bottomrule
 \end{tabular}%
 }
@@ -413,7 +416,7 @@ To enable clinical transparency, we applied SHAP TreeExplainer to quantify featu
 \begin{itemize}
     \item \textbf{Diagnosis Trajectory Features} (particularly \texttt{diagnosis\_mean}, \texttt{diagnosis\_std}, and \texttt{diagnosis\_changes}) dominate predictions, confirming that longitudinal disease history is highly informative for prognosis.
     \item \textbf{Age-Diagnosis Interactions} (\texttt{age\_diagnosis\_product}) are important predictors, capturing progression risk in older patients with existing cognitive impairment.
-    \item \textbf{Current Diagnostic State} (\texttt{target}, \texttt{is\_mci\_now}, and \texttt{is\_mild\_now}) provides strong baseline information for prognosis.
+    \item \textbf{Current Diagnostic State} (\texttt{target} and \texttt{is\_mild\_now}) provides strong baseline information for prognosis.
 \end{itemize}
 
 Class-specific feature comparisons and the mean-absolute-SHAP bar chart are provided in Supplementary Figures S5 and S6.
@@ -448,7 +451,7 @@ Multi-class ROC curves (Figure~\ref{fig:roc}) demonstrate strong discriminative 
 
 \subsection{Model Calibration and Confidence Analysis}
 
-For clinical deployment, predicted probabilities must accurately reflect true outcome likelihoods. We evaluated calibration using reliability diagrams (Supplementary Figure S7). After correcting the probability-normalization step, the calibration ECE values are 0.127, 0.036, 0.099, and 0.046 for Normal, MCI, Mild, and Severe, respectively. Three of the four classes are well calibrated (ECE below 0.1); Normal remains moderately calibrated. Given the improvement already achieved relative to the initial model, we did not pursue further post-hoc calibration, as an additional retraining cycle for a marginal gain on one class would run counter to the simplicity the model is intended to demonstrate.
+For clinical deployment, predicted probabilities must accurately reflect true outcome likelihoods, and calibration is widely regarded as a critical failure mode of predictive models~\cite{vancalster2019}. We evaluated calibration using reliability diagrams (Supplementary Figure S7) and the expected calibration error (ECE) metric~\cite{guo2017}. After correcting the probability-normalization step, the calibration ECE values are 0.127, 0.036, 0.099, and 0.046 for Normal, MCI, Mild, and Severe, respectively. Three of the four classes are well calibrated (ECE below 0.1); Normal remains moderately calibrated. Given the improvement already achieved relative to the initial model, we did not pursue further post-hoc calibration, as an additional retraining cycle for a marginal gain on one class would run counter to the simplicity the model is intended to demonstrate.
 
 Confidence distributions are shown in Supplementary Figure S8; correct predictions have mean maximum probability 0.893 versus 0.737 for incorrect predictions.
 
@@ -469,7 +472,7 @@ The clinical-only approach addresses the critical \textbf{accessibility gap} in 
     \item \textbf{Population Screening:} Cost-effective identification of high-risk individuals for targeted intervention.
 \end{itemize}
 
-\subsection{Error Severity and Clinical Safety}
+\subsection{Error Severity Analysis}
 
 Beyond aggregate accuracy, our error severity analysis provides crucial insights for clinical deployment: a Normal patient misclassified as MCI receives monitoring rather than false reassurance, a Severe patient misclassified as Mild still receives dementia care, and catastrophic Normal $\leftrightarrow$ Severe misclassifications are exceedingly rare.
 
@@ -477,11 +480,13 @@ This error profile is far preferable to models that achieve higher accuracy by c
 
 \subsection{Algorithmic Fairness}
 
-Our fairness analysis reveals consistent performance across sex and racial groups, addressing a critical concern in healthcare AI. The model does not systematically disadvantage historically underserved populations, supporting ethical deployment in diverse clinical settings.
+Performance was broadly similar across the evaluated demographic subgroups, although limited sample sizes in several racial groups (e.g., N=13 for Native Hawaiian/Pacific Islander, N=190 for American Indian/Alaska Native) prevent definitive conclusions regarding algorithmic fairness for those groups~\cite{rajkomar2018,gianfrancesco2018}.
 
 \subsection{Feature Interpretability}
 
-SHAP analysis identifies clinically meaningful predictors. The dominance of longitudinal diagnosis trajectory features (\texttt{diagnosis\_mean}, \texttt{worst\_ever}) confirms that disease history---the pattern of cognitive decline over time---is more prognostically informative than any single biomarker measurement. This finding aligns with clinical intuition and supports the value of longitudinal follow-up in dementia care.
+We note that the model is an intentionally autoregressive next-visit stage forecaster: it uses the patient's own diagnostic history as predictors (consistent with the SHAP findings in Table~\ref{tab:shap}), which differs from predicting the onset of underlying neuropathological change, while still being clinically useful for anticipating the next recorded CDR-based stage.
+
+SHAP analysis identifies clinically meaningful predictors. The dominance of longitudinal diagnosis trajectory features (\texttt{diagnosis\_mean}, \texttt{worst\_diagnosis\_ever}) confirms that disease history---the pattern of cognitive decline over time---is more prognostically informative than any single biomarker measurement. This finding aligns with clinical intuition and supports the value of longitudinal follow-up in dementia care.
 
 The emergence of age-diagnosis interactions as strong predictors validates known epidemiological relationships: cognitive impairment in older patients carries higher progression risk than equivalent impairment in younger patients. This non-linear interaction effect would be missed by simpler linear models.
 
@@ -489,7 +494,7 @@ The emergence of age-diagnosis interactions as strong predictors validates known
 
 Translation would begin with a silent-mode EHR integration in primary-care and community-screening settings. At each eligible visit, the system would retrieve routinely available predictors, apply the locked preprocessing and base XGBoost model, and return a calibrated stage-risk summary with an uncertainty flag to the clinician; no autonomous diagnosis or treatment decision would be made. The interface should display current inputs, predicted next-visit stage, and a concise explanation, while recording model version, timestamp, overrides, and referral actions for auditability.
 
-Prospective validation should first assess technical transportability across sites, temporal drift, calibration, subgroup performance, missing-data behavior, and referral thresholds before any patient-facing alert is enabled. A follow-on implementation study should measure workflow fit, alert burden, usability, adoption, time to specialist referral, clinician override patterns, equity of access, safety events, and changes in appropriate diagnostic work-up. It should also test whether model-supported referral improves clinically meaningful outcomes without increasing unnecessary testing. These staged evaluations would convert this retrospective proof of concept into a monitored clinical decision-support pathway in primary-care and community contexts.
+Prospective validation should first assess technical transportability across sites, temporal drift, calibration, subgroup performance, missing-data behavior, and referral thresholds before any patient-facing alert is enabled, consistent with current reporting and validation guidance for machine-learning prediction models~\cite{collins2024}. A follow-on implementation study should measure workflow fit, alert burden, usability, adoption, time to specialist referral, clinician override patterns, equity of access, safety events, and changes in appropriate diagnostic work-up. It should also test whether model-supported referral improves clinically meaningful outcomes without increasing unnecessary testing. These staged evaluations would convert this retrospective proof of concept into a monitored clinical decision-support pathway in primary-care and community contexts.
 
 \subsection{Comparison with Neuroimaging Models}
 
@@ -504,7 +509,7 @@ Several limitations merit consideration:
 \begin{enumerate}
     \item \textbf{Dataset Bias:} The NACC cohort, while large and multi-center, is collected from specialized Alzheimer's research centers and may not fully reflect primary care populations. External validation on community-based cohorts is needed.
 
-    \item To assess population comparability with an external cohort, we compared baseline demographic and APOE epsilon4 distributions between NACC (n=37,633) and the Alzheimer's Disease Neuroimaging Initiative (ADNI; n=2,049). Of our 101 predictors, only sex, race, ethnicity, age, and APOE epsilon4 carrier count had directly comparable fields in the public ADNIMERGE table; the comorbidity, functional, and behavioral variables that make up most of our feature set are not captured in ADNIMERGE, which is built around cognitive testing and imaging/biomarker measures rather than the detailed medical-history assessment used in NACC's UDS. Even restricted to these comparable fields, the cohorts differ appreciably: ADNI was less racially diverse (92.7\% White vs. 80.9\% in NACC) and had a lower proportion of Hispanic/Latino participants (3.2\% vs. 8.1\%), consistent with ADNI's research/clinical-trial recruitment relative to NACC's clinic-based ADRC population. Additionally, ADNI's diagnostic categorization does not map directly onto the CDR-Global-based staging used here, precluding outcome-level comparison even where demographic fields align. Given this limited feature overlap, we did not attempt a reduced-feature model comparison against ADNI, as it would not constitute a meaningful external validation of the full model; genuine external validation will require a cohort with comparably detailed clinical and comorbidity data. [CITE ADNI]
+    \item To assess population comparability with an external cohort, we compared baseline demographic and APOE epsilon4 distributions between NACC (n=37,633) and the Alzheimer's Disease Neuroimaging Initiative (ADNI; n=2,049). Of our 101 predictors, only sex, race, ethnicity, age, and APOE epsilon4 carrier count had directly comparable fields in the public ADNIMERGE table; the comorbidity, functional, and behavioral variables that make up most of our feature set are not captured in ADNIMERGE, which is built around cognitive testing and imaging/biomarker measures rather than the detailed medical-history assessment used in NACC's UDS. Even restricted to these comparable fields, the cohorts differ appreciably: ADNI was less racially diverse (92.7\% White vs. 80.9\% in NACC) and had a lower proportion of Hispanic/Latino participants (3.2\% vs. 8.1\%), consistent with ADNI's research/clinical-trial recruitment relative to NACC's clinic-based ADRC population. Additionally, ADNI's diagnostic categorization does not map directly onto the CDR-Global-based staging used here, precluding outcome-level comparison even where demographic fields align. Given this limited feature overlap, we did not attempt a reduced-feature model comparison against ADNI, as it would not constitute a meaningful external validation of the full model; genuine external validation will require a cohort with comparably detailed clinical and comorbidity data~\cite{petersen2010,aisen2024}.
 
     \item \textbf{Minority Representation:} Sample sizes for some racial groups (American Indian/Alaska Native, Native Hawaiian/Pacific Islander) are limited, necessitating cautious interpretation of fairness metrics for these populations.
 
@@ -524,11 +529,12 @@ We presented a robust and interpretable machine learning framework for predictin
 
 The framework's key strengths include:
 \begin{itemize}
+    %% TODO-A1: revisit after Part B (claims no genetic testing; contradicts Section 2.2 "Genetic risk (10 features)")
     \item \textbf{Clinical-Only Input:} No imaging, CSF, or genetic testing required beyond routine assessments.
     \item \textbf{Rigorous Validation:} Patient-level data splitting prevents information leakage and ensures honest performance estimates.
-    \item \textbf{Fairness:} Consistent performance across sex, age, and racial subgroups.
+    \item \textbf{Fairness:} Performance was broadly similar across the evaluated sex, age, and racial subgroups, though small subgroup sizes (e.g., N=13 Native Hawaiian/Pacific Islander, N=190 American Indian/Alaska Native) preclude definitive fairness conclusions for those groups.
     \item \textbf{Interpretability:} SHAP-based feature attribution enables clinician understanding and regulatory compliance.
-    \item \textbf{Safety:} Error severity analysis confirms clinically proximal predictions even under misclassification.
+    \item \textbf{Error Severity:} Error severity analysis shows that most misclassifications remain clinically proximal (94.9\% one stage off), although this does not by itself establish clinical safety absent a prospective decision-impact study.
 \end{itemize}
 
 This work supports a ``Frugal AI'' paradigm, democratizing access to early Alzheimer's detection in resource-constrained environments and bridging the gap between theoretical AI advances and practical clinical tools.
@@ -588,6 +594,40 @@ During manuscript preparation, the authors used GitHub Copilot and ChatGPT for l
 \bibitem{han2005} H. Han et al., ``Borderline-SMOTE: A new over-sampling method in imbalanced data sets learning,'' in \textit{Advances in Intelligent Computing}, pp. 878--887, 2005.
 
 \bibitem{lundberg2017} S. M. Lundberg and S.-I. Lee, ``A unified approach to interpreting model predictions,'' in \textit{NeurIPS}, pp. 4765--4774, 2017.
+
+\bibitem{petersen2010} R. C. Petersen et al., ``Alzheimer's Disease Neuroimaging Initiative (ADNI): Clinical characterization,'' \textit{Neurology}, vol. 74, no. 3, pp. 201--209, 2010.
+
+\bibitem{aisen2024} P. S. Aisen et al., ``The Alzheimer's Disease Neuroimaging Initiative Clinical Core,'' \textit{Alzheimer's \& Dementia}, vol. 20, no. 10, pp. 7361--7368, 2024.
+
+\bibitem{song2023} S. Song et al., ``Predicting progression to clinical Alzheimer's disease dementia using the random survival forest,'' \textit{J. Alzheimers Dis.}, vol. 95, no. 2, pp. 535--548, 2023.
+
+\bibitem{pang2023} Y. Pang et al., ``Predicting progression from normal to MCI and from MCI to AD using clinical variables in the National Alzheimer's Coordinating Center Uniform Data Set version 3: Application of machine learning models and a probability calculator,'' \textit{J. Prev. Alzheimers Dis.}, vol. 10, no. 2, pp. 301--313, 2023.
+
+\bibitem{arnold2025} D. Arnold et al., ``Stratifying dementia risk factors: A prediction model and hypothesis-driven analysis,'' \textit{Alzheimer's \& Dementia}, vol. 21, no. 10, p. e70870, 2025.
+
+\bibitem{alolaimat2023} M. Al Olaimat et al., ``PPAD: A deep learning architecture to predict progression of Alzheimer's disease,'' \textit{Bioinformatics}, vol. 39, no. Suppl 1, pp. i149--i157, 2023.
+
+\bibitem{kannenieks2026} D. Kannenieks et al., ``Development and external validation of a machine learning model for classification of mild cognitive impairment and dementia using clinical data,'' \textit{Medicina (Kaunas)}, vol. 62, no. 7, p. 1356, 2026.
+
+\bibitem{rajkomar2018} A. Rajkomar et al., ``Ensuring fairness in machine learning to advance health equity,'' \textit{Ann. Intern. Med.}, vol. 169, no. 12, pp. 866--872, 2018.
+
+\bibitem{vancalster2019} B. Van Calster et al., ``Calibration: The Achilles heel of predictive analytics,'' \textit{BMC Med.}, vol. 17, no. 1, p. 230, 2019.
+
+\bibitem{guo2017} C. Guo et al., ``On calibration of modern neural networks,'' in \textit{Proc. 34th Int. Conf. Mach. Learn. (ICML)}, vol. 70, pp. 1321--1330, 2017.
+
+\bibitem{collins2024} G. S. Collins et al., ``TRIPOD+AI statement: Updated guidance for reporting clinical prediction models that use regression or machine learning methods,'' \textit{BMJ}, vol. 385, p. e078378, 2024.
+
+\bibitem{collins2021} G. S. Collins et al., ``Protocol for development of a reporting guideline (TRIPOD-AI) and risk of bias tool (PROBAST-AI) for diagnostic and prognostic prediction model studies based on artificial intelligence,'' \textit{BMJ Open}, vol. 11, no. 7, p. e048008, 2021.
+
+\bibitem{yew2024} P. Y. Yew et al., ``Unraveling the multiple chronic conditions patterns among people with Alzheimer's disease and related dementia: A machine learning approach to incorporate synergistic interactions,'' \textit{Alzheimer's \& Dementia}, vol. 20, no. 7, pp. 4818--4827, 2024.
+
+\bibitem{gianfrancesco2018} M. A. Gianfrancesco et al., ``Potential biases in machine learning algorithms using electronic health record data,'' \textit{JAMA Intern. Med.}, vol. 178, no. 11, pp. 1544--1547, 2018.
+
+\bibitem{gbd2019} GBD 2019 Dementia Forecasting Collaborators, ``Estimation of the global prevalence of dementia in 2019 and forecasted prevalence in 2050: An analysis for the Global Burden of Disease Study 2019,'' \textit{Lancet Public Health}, vol. 7, no. 2, pp. e105--e125, 2022.
+
+\bibitem{kapoor2023} S. Kapoor and A. Narayanan, ``Leakage and the reproducibility crisis in machine-learning-based science,'' \textit{Patterns}, vol. 4, no. 9, p. 100804, 2023.
+
+\bibitem{chawla2002} N. V. Chawla et al., ``SMOTE: Synthetic minority over-sampling technique,'' \textit{J. Artif. Intell. Res.}, vol. 16, pp. 321--357, 2002.
 
 \end{thebibliography}
 
