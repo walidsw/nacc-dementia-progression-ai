@@ -1,6 +1,6 @@
 Rank,Normal,MCI,Mild,Severe
-1,diagnosis_mean (2.455),diagnosis_mean (0.979),age_diagnosis_product (1.365),age_diagnosis_product (0.801)
-2,is_normal_now (0.847),age_diagnosis_product (0.726),diagnosis_mean (0.524),target (0.552)
-3,age_diagnosis_product (0.717),worst_diagnosis_ever (0.245),target (0.187),is_normal_now (0.352)
-4,diagnosis_std (0.090),is_normal_now (0.140),prev_diagnosis_3 (0.153),diagnosis_mean (0.210)
-5,worst_diagnosis_ever (0.060),is_mci_now (0.137),worst_diagnosis_ever (0.105),diagnosis_std (0.175)
+1,diagnosis_mean (2.194),diagnosis_mean (1.263),age_diagnosis_product (1.025),age_diagnosis_product (0.788)
+2,target (0.415),diagnosis_std (0.184),diagnosis_mean (0.609),target (0.659)
+3,age_diagnosis_product (0.210),diagnosis_changes (0.116),worst_diagnosis_ever (0.332),diagnosis_std (0.295)
+4,diagnosis_std (0.161),target (0.109),is_mild_now (0.149),diagnosis_mean (0.289)
+5,diagnosis_changes (0.070),worst_diagnosis_ever (0.105),target (0.115),educ_diagnosis_interaction (0.164)

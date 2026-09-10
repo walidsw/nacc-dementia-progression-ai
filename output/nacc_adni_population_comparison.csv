@@ -1,0 +1,23 @@
+Feature,NACC,ADNI
+N_baseline_patients,37633.0,2049.0
+Age_mean,71.1,73.4
+Age_SD,10.1,7.2
+Age_median,72.0,73.4
+Age_min,18.0,54.0
+Age_max,109.0,91.0
+Sex: Male,42.8,53.6
+Sex: Female,57.2,46.4
+Race: White,80.9,92.7
+Race: Black/African American,13.9,4.0
+Race: American Indian/Alaska Native,0.8,0.2
+Race: Native Hawaiian/Pacific Islander,0.1,0.1
+Race: Asian,2.6,1.7
+Race: Other/Multiracial,1.3,1.2
+Race: Unknown,0.5,0.1
+Ethnicity: Not Hispanic/Latino,91.6,96.2
+Ethnicity: Hispanic/Latino,8.1,3.2
+Ethnicity: Unknown,0.4,0.6
+APOE4: 0 copies,50.5,54.4
+APOE4: 1 copy,28.4,36.1
+APOE4: 2 copies,5.5,9.5
+APOE4: Unknown,15.6,0.0

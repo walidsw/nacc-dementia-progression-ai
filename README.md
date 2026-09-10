@@ -1,10 +1,10 @@
 # Cost-Effective Clinical AI for Dementia Progression Forecasting: A Robust Gradient Boosting Framework Using Exclusively Routine Clinical Data from the NACC Cohort
 
-**Authors:** MD Walid Waccub Swadhin, A. F. M. Minhazur Rahman$^\dagger$
+**Author:** MD Walid Waccub Swadhin
 **Affiliation:** Department of Computer Science and Engineering, Rajshahi University of Engineering and Technology (RUET), Rajshahi, Bangladesh
 **Journal:** Computers in Biology and Medicine [Elsevier, Q1]
 **Status:** Manuscript submitted for review.
-$^\dagger$Corresponding Author
+**Corresponding Author:** MD Walid Waccub Swadhin
 
 ---
 
@@ -16,22 +16,22 @@ $^\dagger$Corresponding Author
 
 ## Abstract
 
-This repository contains the complete codebase and reproducibility materials for our framework that predicts dementia progression using exclusively routine clinical data, without relying on expensive or invasive neuroimaging (MRI/PET) or cerebrospinal fluid (CSF) biomarkers. Our proposed framework utilizes an optimized XGBoost gradient boosting classifier coupled with BorderlineSMOTE to handle severe class imbalance. Validated using a rigorous patient-level GroupShuffleSplit to prevent data leakage, the model achieves 88.61% accuracy and an 85.63% macro F1-score on an independent test set. The repository includes comprehensive fairness audits demonstrating equitable performance across demographic subgroups and SHAP-based interpretability analysis for clinical transparency.
+This repository contains the complete codebase and reproducibility materials for our framework that predicts dementia progression using exclusively routine clinical data, without relying on expensive or invasive neuroimaging (MRI/PET) or cerebrospinal fluid (CSF) biomarkers. The final evaluated configuration is a base XGBoost model without SMOTE; BorderlineSMOTE and a weighted XGBoost/LightGBM/CatBoost ensemble were evaluated as ablations. Validated using a rigorous patient-level GroupShuffleSplit to prevent data leakage, the final model achieves 88.59% accuracy and an 85.57% macro F1-score on an independent test set. The repository includes comprehensive fairness audits and SHAP-based interpretability analysis for clinical transparency.
 
 ---
 
 ## Key Results
 
-Our framework demonstrated robust discriminative performance across all diagnostic stages, with all classes achieving an Area Under the ROC Curve (AUC) above 0.90. Error severity analysis confirmed that 94.7% of all misclassifications were only "1-stage off," indicating high clinical safety.
+Our framework demonstrated robust discriminative performance across all diagnostic stages, with AUC values ranging from 0.952 to 0.989. Error severity analysis found that 94.0% of misclassifications were only "1-stage off."
 
 | Metric / Diagnostic Class | F1-Score / Value |
 | :--- | :--- |
 | **Normal (CDR 0)** | 0.94 |
-| **MCI (CDR 0.5)** | 0.83 |
-| **Mild Dementia (CDR 1.0)** | 0.76 |
-| **Severe Dementia (CDR ≥2.0)** | 0.89 |
-| **Overall Accuracy** | **88.61%** |
-| **Macro F1-Score** | **85.63%** |
+| **MCI (CDR 0.5)** | 0.84 |
+| **Mild Dementia (CDR 1.0)** | 0.77 |
+| **Severe Dementia (CDR ≥2.0)** | 0.88 |
+| **Overall Accuracy** | **88.59%** |
+| **Macro F1-Score** | **85.57%** |
 
 ---
 
@@ -103,7 +103,7 @@ If you use our code, framework, or methodology in your research, please cite our
 
 @article{swadhin2026costeffective,
   title={Cost-Effective Clinical AI for Dementia Progression Forecasting: A Robust Gradient Boosting Framework Using Exclusively Routine Clinical Data from the NACC Cohort},
-  author={Swadhin, MD Walid Waccub and Rahman, A. F. M. Minhazur},
+  author={Swadhin, MD Walid Waccub},
   journal={Computers in Biology and Medicine},
   year={2026},
   publisher={Elsevier},
@@ -122,7 +122,6 @@ Data Disclaimer: The data used by this code is separately governed by the NACC D
 
 ## Contact
 
-For any questions regarding the code, methodology, or paper, please contact the authors:
+For any questions regarding the code, methodology, or paper, please contact the author:
 
-MD Walid Waccub Swadhin: waccub@mail.com
-A. F. M. Minhazur Rahman: afm.minhazur@cse.ruet.ac.bd
+MD Walid Waccub Swadhin: waccub@gmail.com

@@ -1,0 +1,102 @@
+nacc_feature,type,closest_adni_column,similarity,status
+NACCAGE,raw_uds_variable,AGE,0.6,"possible_match — VERIFY MANUALLY, do not trust automatically"
+SEX,raw_uds_variable,,,no_plausible_match_found
+EDUC,raw_uds_variable,PTEDUCAT,0.67,"possible_match — VERIFY MANUALLY, do not trust automatically"
+RACE,raw_uds_variable,,,no_plausible_match_found
+HISPANIC,raw_uds_variable,,,no_plausible_match_found
+MARISTAT,raw_uds_variable,,,no_plausible_match_found
+RESIDENC,raw_uds_variable,,,no_plausible_match_found
+HANDED,raw_uds_variable,,,no_plausible_match_found
+NACCAPOE,raw_uds_variable,APOE4,0.62,"possible_match — VERIFY MANUALLY, do not trust automatically"
+NACCNE4S,raw_uds_variable,,,no_plausible_match_found
+NACCFAM,raw_uds_variable,,,no_plausible_match_found
+NACCMOM,raw_uds_variable,,,no_plausible_match_found
+NACCDAD,raw_uds_variable,,,no_plausible_match_found
+HEIGHT,raw_uds_variable,,,no_plausible_match_found
+WEIGHT,raw_uds_variable,,,no_plausible_match_found
+NACCBMI,raw_uds_variable,,,no_plausible_match_found
+BPSYS,raw_uds_variable,,,no_plausible_match_found
+BPDIAS,raw_uds_variable,,,no_plausible_match_found
+HRATE,raw_uds_variable,,,no_plausible_match_found
+VISION,raw_uds_variable,FSVERSION,0.67,"possible_match — VERIFY MANUALLY, do not trust automatically"
+HEARING,raw_uds_variable,RAVLT_learning,0.6,"possible_match — VERIFY MANUALLY, do not trust automatically"
+CVHATT,raw_uds_variable,,,no_plausible_match_found
+CVAFIB,raw_uds_variable,,,no_plausible_match_found
+CVANGIO,raw_uds_variable,,,no_plausible_match_found
+CVBYPASS,raw_uds_variable,,,no_plausible_match_found
+CVPACE,raw_uds_variable,,,no_plausible_match_found
+CVCHF,raw_uds_variable,,,no_plausible_match_found
+CVOTHR,raw_uds_variable,,,no_plausible_match_found
+HYPERTEN,raw_uds_variable,,,no_plausible_match_found
+CBSTROKE,raw_uds_variable,,,no_plausible_match_found
+CBTIA,raw_uds_variable,ABETA,0.6,"possible_match — VERIFY MANUALLY, do not trust automatically"
+SEIZURES,raw_uds_variable,,,no_plausible_match_found
+TBI,raw_uds_variable,,,no_plausible_match_found
+PD,raw_uds_variable,PTID,0.67,"possible_match — VERIFY MANUALLY, do not trust automatically"
+DIABETES,raw_uds_variable,ABETA,0.62,"possible_match — VERIFY MANUALLY, do not trust automatically"
+HYPERCHO,raw_uds_variable,,,no_plausible_match_found
+B12DEF,raw_uds_variable,,,no_plausible_match_found
+THYROID,raw_uds_variable,RID,0.6,"possible_match — VERIFY MANUALLY, do not trust automatically"
+INCONTU,raw_uds_variable,,,no_plausible_match_found
+INCONTF,raw_uds_variable,,,no_plausible_match_found
+APNEA,raw_uds_variable,APOE4,0.6,"possible_match — VERIFY MANUALLY, do not trust automatically"
+INSOMN,raw_uds_variable,,,no_plausible_match_found
+ALCOHOL,raw_uds_variable,,,no_plausible_match_found
+TOBAC30,raw_uds_variable,,,no_plausible_match_found
+TOBAC100,raw_uds_variable,,,no_plausible_match_found
+PACKSPER,raw_uds_variable,,,no_plausible_match_found
+DEP2YRS,raw_uds_variable,,,no_plausible_match_found
+ANXIETY,raw_uds_variable,,,no_plausible_match_found
+ANYMEDS,raw_uds_variable,,,no_plausible_match_found
+target,raw_uds_variable,AGE,0.67,"possible_match — VERIFY MANUALLY, do not trust automatically"
+visit_number,engineered_by_notebook,,,"N/A — engineered, must be recomputed from ADNI's own longitudinal fields"
+is_normal_now,engineered_by_notebook,,,"N/A — engineered, must be recomputed from ADNI's own longitudinal fields"
+is_mci_now,engineered_by_notebook,,,"N/A — engineered, must be recomputed from ADNI's own longitudinal fields"
+is_mild_now,engineered_by_notebook,,,"N/A — engineered, must be recomputed from ADNI's own longitudinal fields"
+is_severe_now,engineered_by_notebook,,,"N/A — engineered, must be recomputed from ADNI's own longitudinal fields"
+prev_diagnosis_1,engineered_by_notebook,,,"N/A — engineered, must be recomputed from ADNI's own longitudinal fields"
+prev_diagnosis_2,engineered_by_notebook,,,"N/A — engineered, must be recomputed from ADNI's own longitudinal fields"
+prev_diagnosis_3,engineered_by_notebook,,,"N/A — engineered, must be recomputed from ADNI's own longitudinal fields"
+is_first_visit,engineered_by_notebook,,,"N/A — engineered, must be recomputed from ADNI's own longitudinal fields"
+stayed_same,engineered_by_notebook,,,"N/A — engineered, must be recomputed from ADNI's own longitudinal fields"
+progressed_recently,engineered_by_notebook,,,"N/A — engineered, must be recomputed from ADNI's own longitudinal fields"
+progression_speed,engineered_by_notebook,,,"N/A — engineered, must be recomputed from ADNI's own longitudinal fields"
+diagnosis_changes,engineered_by_notebook,,,"N/A — engineered, must be recomputed from ADNI's own longitudinal fields"
+stability_score,engineered_by_notebook,TRABSCOR,0.64,"N/A — engineered, must be recomputed from ADNI's own longitudinal fields"
+diagnosis_mean,engineered_by_notebook,,,"N/A — engineered, must be recomputed from ADNI's own longitudinal fields"
+diagnosis_std,engineered_by_notebook,,,"N/A — engineered, must be recomputed from ADNI's own longitudinal fields"
+worst_diagnosis_ever,engineered_by_notebook,,,"N/A — engineered, must be recomputed from ADNI's own longitudinal fields"
+age_baseline,engineered_by_notebook,,,"N/A — engineered, must be recomputed from ADNI's own longitudinal fields"
+years_in_study,engineered_by_notebook,,,"N/A — engineered, must be recomputed from ADNI's own longitudinal fields"
+age_squared,engineered_by_notebook,,,"N/A — engineered, must be recomputed from ADNI's own longitudinal fields"
+age_risk_extreme,engineered_by_notebook,,,"N/A — engineered, must be recomputed from ADNI's own longitudinal fields"
+age_risk_very_high,engineered_by_notebook,,,"N/A — engineered, must be recomputed from ADNI's own longitudinal fields"
+age_risk_high,engineered_by_notebook,,,"N/A — engineered, must be recomputed from ADNI's own longitudinal fields"
+age_diagnosis_product,engineered_by_notebook,,,"N/A — engineered, must be recomputed from ADNI's own longitudinal fields"
+apoe4_any,engineered_by_notebook,APOE4,0.77,"N/A — engineered, must be recomputed from ADNI's own longitudinal fields"
+apoe4_double,engineered_by_notebook,APOE4,0.62,"N/A — engineered, must be recomputed from ADNI's own longitudinal fields"
+apoe4_count,engineered_by_notebook,APOE4,0.67,"N/A — engineered, must be recomputed from ADNI's own longitudinal fields"
+apoe4_age_risk,engineered_by_notebook,,,"N/A — engineered, must be recomputed from ADNI's own longitudinal fields"
+apoe4_elderly,engineered_by_notebook,,,"N/A — engineered, must be recomputed from ADNI's own longitudinal fields"
+cv_count,engineered_by_notebook,,,"N/A — engineered, must be recomputed from ADNI's own longitudinal fields"
+cv_any,engineered_by_notebook,,,"N/A — engineered, must be recomputed from ADNI's own longitudinal fields"
+cv_severe,engineered_by_notebook,,,"N/A — engineered, must be recomputed from ADNI's own longitudinal fields"
+neuro_count,engineered_by_notebook,,,"N/A — engineered, must be recomputed from ADNI's own longitudinal fields"
+neuro_any,engineered_by_notebook,,,"N/A — engineered, must be recomputed from ADNI's own longitudinal fields"
+metabolic_count,engineered_by_notebook,,,"N/A — engineered, must be recomputed from ADNI's own longitudinal fields"
+metabolic_any,engineered_by_notebook,,,"N/A — engineered, must be recomputed from ADNI's own longitudinal fields"
+total_comorbidity_score,engineered_by_notebook,,,"N/A — engineered, must be recomputed from ADNI's own longitudinal fields"
+high_comorbidity,engineered_by_notebook,,,"N/A — engineered, must be recomputed from ADNI's own longitudinal fields"
+NACCBMI_change,engineered_by_notebook,,,"N/A — engineered, must be recomputed from ADNI's own longitudinal fields"
+NACCBMI_rolling_mean,engineered_by_notebook,,,"N/A — engineered, must be recomputed from ADNI's own longitudinal fields"
+BPSYS_change,engineered_by_notebook,,,"N/A — engineered, must be recomputed from ADNI's own longitudinal fields"
+BPSYS_rolling_mean,engineered_by_notebook,,,"N/A — engineered, must be recomputed from ADNI's own longitudinal fields"
+BPDIAS_change,engineered_by_notebook,,,"N/A — engineered, must be recomputed from ADNI's own longitudinal fields"
+BPDIAS_rolling_mean,engineered_by_notebook,,,"N/A — engineered, must be recomputed from ADNI's own longitudinal fields"
+HRATE_change,engineered_by_notebook,,,"N/A — engineered, must be recomputed from ADNI's own longitudinal fields"
+HRATE_rolling_mean,engineered_by_notebook,,,"N/A — engineered, must be recomputed from ADNI's own longitudinal fields"
+WEIGHT_change,engineered_by_notebook,,,"N/A — engineered, must be recomputed from ADNI's own longitudinal fields"
+WEIGHT_rolling_mean,engineered_by_notebook,,,"N/A — engineered, must be recomputed from ADNI's own longitudinal fields"
+age_apoe4_interaction,engineered_by_notebook,,,"N/A — engineered, must be recomputed from ADNI's own longitudinal fields"
+age_cv_interaction,engineered_by_notebook,,,"N/A — engineered, must be recomputed from ADNI's own longitudinal fields"
+educ_diagnosis_interaction,engineered_by_notebook,,,"N/A — engineered, must be recomputed from ADNI's own longitudinal fields"

@@ -1,0 +1,42 @@
+\documentclass[preprint,12pt]{elsarticle}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{hyperref}
+\journal{International Journal of Medical Informatics}
+\begin{document}
+\begin{frontmatter}
+\title{IJMI Machine Learning Reporting Checklist}
+\author{MD Walid Waccub Swadhin}
+\ead{waccub@gmail.com}
+\end{frontmatter}
+
+This checklist maps the reported study to key reporting domains in TRIPOD+AI and PROBAST-AI. It is intended as a submission supplement; item wording is summarized rather than reproduced.
+
+\begin{longtable}{p{0.25\textwidth}p{0.30\textwidth}p{0.37\textwidth}}
+\toprule
+\textbf{Domain} & \textbf{TRIPOD+AI / PROBAST-AI topic} & \textbf{Study location and status} \\
+\midrule
+\endhead
+Study design & Study objective and design & Introduction; retrospective next-visit, four-class prediction task. \\
+Data source & Data provenance and setting & Materials and Methods, Dataset; NACC Uniform Data Set and participating centers. \\
+Participants & Eligibility and cohort construction & Dataset; consecutive visits and exclusion of missing targets are described. \\
+Outcome & Outcome definition and prediction horizon & Target Variable Definition; CDRGLOB at visit $t+1$, mapped to four classes. \\
+Predictors & Predictor availability and definition & Feature Engineering; 101 predictors after excluding identifiers and future target. \\
+Preprocessing & Missing data and feature processing & Data Preprocessing; median imputation, encoding, and finite-value handling. \\
+Model development & Algorithms and hyperparameters & Gradient Boosting Framework; base XGBoost and ablation configurations are specified. \\
+Data splitting & Leakage prevention and resampling & GroupShuffleSplit at patient level; SMOTE restricted to ablation training data. \\
+Validation & Internal validation strategy & Single patient-level 80/20 train-test split with a 20\% internal validation holdout for early stopping. \\
+Performance & Discrimination and classification metrics & Results; accuracy, macro/weighted F1, class metrics, ROC curves, and error analysis. \\
+Calibration & Calibration reporting & Model Calibration and Confidence Analysis; class-specific ECE and reliability curves are reported. \\
+Subgroups & Fairness and bias assessment & Demographic Fairness Analysis; sex, age, race, and explicit Unknown subgroup results. \\
+Interpretability & Explainability and feature attribution & SHAP TreeExplainer analysis and class-specific feature rankings. \\
+Reproducibility & Code, data access, and model specification & Data Availability Statement, repository, notebook, requirements, and supplementary outputs. \\
+Intended use & Clinical context and limitations & Clinical Translation Roadmap; primary-care/community screening pathway and prospective validation plan. \\
+Risk of bias & Applicability and limitations & Limitations; cohort representativeness, subgroup sizes, time horizon, feature availability, and oversampling limitations. \\
+\bottomrule
+\end{longtable}
+
+\section*{Checklist notes}
+The study is a retrospective single-split evaluation and is not a prospective impact or randomized implementation study. Calibration, subgroup performance, and external transportability require prospective and multi-site confirmation before clinical deployment. The intended use is decision support and risk stratification, not autonomous diagnosis or treatment selection.
+
+\end{document}
