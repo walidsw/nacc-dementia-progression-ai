@@ -25,3 +25,13 @@ env/
 # OS generated files
 .DS_Store
 Thumbs.db
+
+# Derived / restricted data artifacts (NACC & ADNI Data Use Agreements) -- do not commit
+ADNIMERGE.csv
+dementia_research_results_*.zip
+output_before_buggy/
+catboost_info/
+# NOTE: output/features_engineered.csv is currently tracked; it contains NACCID
+# and patient-level NACC-derived data. Untracking it (git rm --cached) and
+# purging it from history is an author decision (see Data Availability).
+output/features_engineered.csv
