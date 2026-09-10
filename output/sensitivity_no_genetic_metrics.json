@@ -1,0 +1,25 @@
+{
+  "accuracy": 0.8778516316510238,
+  "macro_f1": 0.85054891548785,
+  "weighted_f1": 0.8791920714145669,
+  "per_class_f1": {
+    "Normal": 0.9321589457406038,
+    "MCI": 0.8266024676497141,
+    "Mild": 0.7686205376817982,
+    "Severe": 0.8748137108792846
+  },
+  "n_predictors": 90,
+  "excluded_columns": [
+    "NACCAPOE",
+    "NACCNE4S",
+    "NACCFAM",
+    "NACCMOM",
+    "NACCDAD",
+    "apoe4_any",
+    "apoe4_double",
+    "apoe4_count",
+    "apoe4_age_risk",
+    "apoe4_elderly",
+    "age_apoe4_interaction"
+  ]
+}

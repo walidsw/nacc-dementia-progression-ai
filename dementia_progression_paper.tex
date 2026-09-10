@@ -72,8 +72,7 @@
 \textbf{Results:} On an independent test set of 29,939 visits from 7,527 patients, the base XGBoost model achieved \textbf{87.82\%} accuracy, \textbf{85.14\%} macro F1, and \textbf{87.95\%} weighted F1. Class-specific F1-scores were 0.93 (Normal), 0.83 (MCI), 0.77 (Mild), and 0.88 (Severe). Of all misclassifications, 94.9\% were one stage off, with only 0.2\% three stages off. Performance was broadly consistent across sex, age, and race, although limited subgroup sizes for several racial groups preclude definitive fairness conclusions. SHAP analysis identified diagnosis trajectory, current diagnostic state, and age-diagnosis interaction features as the strongest predictors. Adding BorderlineSMOTE or ensembling reduced aggregate performance relative to the base model.
 
 \vspace{0.5em}
-%% TODO-A1: revisit after Part B (clinical-only claim; contrasts with Section 2.2 genetic-risk features)
-\textbf{Conclusions:} Robust dementia risk stratification is achievable without expensive neuroimaging, using only routine clinical assessments. The framework offers a scalable and transparent tool for clinical decision support in community healthcare and resource-constrained settings, with performance broadly similar across the evaluated demographic subgroups; larger subgroup samples are needed before definitive fairness claims can be made. These results support a ``Frugal AI'' paradigm that democratizes early Alzheimer's detection.
+\textbf{Conclusions:} Robust dementia risk stratification is achievable using routine clinical assessments, without expensive neuroimaging. A sensitivity analysis excluding all APOE genotype and family-history variables changed macro F1 by only 0.09 percentage points, indicating that the framework does not depend on genetic testing. The framework offers a scalable and transparent tool for clinical decision support in community healthcare and resource-constrained settings, with performance broadly similar across the evaluated demographic subgroups; larger subgroup samples are needed before definitive fairness claims can be made. These results support a ``Frugal AI'' paradigm that democratizes early Alzheimer's detection.
 \end{abstract}
 
 \begin{keyword}
@@ -305,6 +304,30 @@ A critical question in clinical AI is whether increased model complexity transla
 
 \textbf{Interpretation:} The base XGBoost model without synthetic oversampling or ensembling yielded the highest aggregate performance. Adding SMOTE reduced macro F1 by approximately 1.4 percentage points, and the full ensemble reduced it by approximately 2.3 percentage points relative to the base configuration (Supplementary Table S1). These results support a ``Frugal AI'' approach in which the simpler model is preferred for this evaluation split.
 
+\subsection{Sensitivity Analysis: Excluding Genetic-Risk Features}
+\label{sec:sensitivity}
+
+Because many care settings do not routinely collect genetic data, we repeated the base XGBoost configuration with all 11 APOE- and family-history--derived columns removed: the five raw variables (\texttt{NACCAPOE}, \texttt{NACCNE4S}, \texttt{NACCFAM}, \texttt{NACCMOM}, \texttt{NACCDAD}), the five engineered APOE4 indicators (\texttt{apoe4\_any}, \texttt{apoe4\_double}, \texttt{apoe4\_count}, \texttt{apoe4\_age\_risk}, \texttt{apoe4\_elderly}), and the age$\times$APOE4 interaction term. This left 90 predictors. The patient-level split, preprocessing, class weights, and hyperparameters were held identical to the base configuration, so the only change was the input feature set.
+
+\begin{table}[htbp]
+\caption{Sensitivity Analysis: Base XGBoost With and Without Genetic-Risk Features}
+\label{tab:sensitivity}
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Model} & \textbf{Accuracy} & \textbf{Macro F1} & \textbf{Weighted F1} \\
+\midrule
+Base (101 predictors) & 0.8782 & 0.8514 & 0.8795 \\
+No genetic-risk features (90 predictors) & 0.8779 & 0.8505 & 0.8792 \\
+\midrule
+$\Delta$ & $-0.0003$ & $-0.0009$ & $-0.0003$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{table}
+
+Removing all APOE genotype and family-history information changed accuracy by 0.03 percentage points and macro F1 by 0.09 percentage points (85.14\% to 85.05\%), with per-class F1 changing by at most 0.19 percentage points (Severe, 0.8767 to 0.8748). Performance was therefore essentially unchanged, indicating that the framework does not depend on genetic testing.
+
 \subsection{Error Analysis and Error Severity}
 
 We conducted a detailed analysis of the 3,646 misclassified samples (12.2\% error rate) to characterize error severity (Table~\ref{tab:errors}).
@@ -529,8 +552,7 @@ We presented a robust and interpretable machine learning framework for predictin
 
 The framework's key strengths include:
 \begin{itemize}
-    %% TODO-A1: revisit after Part B (claims no genetic testing; contradicts Section 2.2 "Genetic risk (10 features)")
-    \item \textbf{Clinical-Only Input:} No imaging, CSF, or genetic testing required beyond routine assessments.
+    \item \textbf{Clinical-Only Input:} No imaging or CSF testing is required, and the framework does not depend on genetic testing: excluding APOE genotype and family-history variables changed macro F1 by only 0.09 percentage points (Section~\ref{sec:sensitivity}).
     \item \textbf{Rigorous Validation:} Patient-level data splitting prevents information leakage and ensures honest performance estimates.
     \item \textbf{Fairness:} Performance was broadly similar across the evaluated sex, age, and racial subgroups, though small subgroup sizes (e.g., N=13 Native Hawaiian/Pacific Islander, N=190 American Indian/Alaska Native) preclude definitive fairness conclusions for those groups.
     \item \textbf{Interpretability:} SHAP-based feature attribution enables clinician understanding and regulatory compliance.
