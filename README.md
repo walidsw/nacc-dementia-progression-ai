@@ -76,6 +76,8 @@ pip install -r requirements.txt
 
 WARNING: The NACC dataset is not included in this repository due to a strict Data Use Agreement (DUA). You must obtain the data independently and place it in the Data/ folder before running the scripts. See the Data Access section below for details.
 
+**Required input path.** `data_create.py` expects the main UDS investigator file at exactly `Data/investigator_nacc71.csv` (this path is hard-coded as `CONFIG['INPUT_FILE']` on line 9 of `data_create.py`). That file must be obtained through a NACC data request (see `DATA_ACCESS.md`) and placed at that exact path — with the `Data/` folder located at the repository root — before `data_create.py` is run. The accompanying `Data/ADSP-PHC-122024-investigator/` directory and all of its subfolders are also required. Do not rename the file or the folders: the scripts read these paths literally and will fail with a file-not-found error otherwise.
+
 Once the data is correctly placed in the Data/ folder, run the pipeline in the following order:
 
 Step 1: Preprocess the data and engineer features:
